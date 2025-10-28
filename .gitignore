@@ -1,0 +1,8 @@
+# Ignore VS Code settings
+.vscode/
+
+# Python virtual environment
+venv/
+
+# Ignore archives
+*.zip

@@ -1,0 +1,130 @@
+---
+title: "SAN feature selection in regression models -- Boston data"
+output: html_document
+date: "`r format(Sys.Date(), '%d-%m-%Y')`"
+---
+
+```{r libs, include=FALSE}
+library("MASS") # collection of data sets and functions
+library("ISLR") # data sets associated with the text
+library("glmnet") # lasso
+```
+
+# Multiple linear regression
+
+This script stems from the lab accompanying Chapter 3 of Introduction to Statistical Learning and follows on from the previous script analyzing Boston data. This time we will work with multiple linear regression and will try to identify the model of right size.
+
+```{r multiple regression}
+help(Boston) # learn the structure of the dataset, 506 areas described by 14 variables, medv will serve as the target variable
+
+# employ all the available independent variables
+lm.fit.all <- lm(medv ~ ., data=Boston)
+summary(lm.fit.all) # model improves again, only some of the variables seem to be unimportant, we may want to exclude them
+
+# use correlation coefficients, keep only variables that significantly correlate with medv
+sort(apply(Boston,2,function(x) cor.test(x,Boston$medv)$p.value)) # recommendation: keep all
+
+# use the coefficient p-values to decide whether to include variables
+lm.fit.exclude <- lm(medv ~ . -rad -age -indus, data=Boston) # truly exclude age and indus
+summary(lm.fit.exclude) # the simpler model seems to maintain the performance of the previous model
+anova(lm.fit.exclude,lm.fit.all) # no difference, the simpler model preferred
+
+## use stepwise regression for feature selection
+step <- stepAIC(lm.fit.all, direction="both") # stepwise regression, based on AIC criterion, taken from MASS library, use trace=0 to avoid output
+step$anova # display results, actually does the same as we did manually, removes age and indus
+stepAIC(lm(medv~1,Boston), direction="forward",scope=list(upper=lm.fit.all))
+stepAIC(lm.fit.all, direction="backward")
+
+# Fit LASSO to remove unimportant predictors
+lambda_grid <- 10^ seq(10 , -3 , length =200)
+lasso.model <- glmnet(as.matrix(Boston[,-ncol(Boston)]),Boston$medv,alpha=1, lambda=lambda_grid, standardize=TRUE)
+lasso.cv.out <- cv.glmnet(as.matrix(Boston[,-ncol(Boston)]),Boston$medv,alpha=1)
+plot(lasso.cv.out) # small lambda values preferred, shrinkage effect is small
+## λmin is the value of the LASSO penalty that minimizes cross-validated error, giving the most predictive but usually less sparse model.
+lasso.lambda.min <- lasso.cv.out$lambda.min
+lasso.coefficients <- predict(lasso.model, type="coefficients", s=lasso.lambda.min)
+
+# Display the coefficients and selected variables
+print("LASSO coefficients:")
+print(as.matrix(lasso.coefficients)) # the absolute coefficent values influenced by the scale of the individual variables, nox has a small scale
+print(as.matrix(lasso.coefficients)[seq(2,length(Boston)-1),] != 0) # removes indus and age too
+```
+# Further thoughts and finetuning
+
+The best linear model balances predictive accuracy and parsimony. Above, we used statistical significance as one way to assess this balance. However, the Boston dataset has a relatively high ratio of samples to predictors. Consequently, even very small changes in predictive accuracy — potentially negligible in practice — can appear statistically significant. In LASSO, small differences in predictive accuracy may lead to substantially larger selected models. Below, we demonstrate that models with fewer features can achieve very competitive performance as well.
+
+```{r lasso revisited}
+## above, we used λmin that minimizes cross-validated error, giving the most predictive but usually less sparse model
+## 𝜆1se is the largest 𝜆within one standard error of the minimum, producing a simpler, sparser model with only a slight increase in error
+lasso.lambda.1se <- lasso.cv.out$lambda.1se
+lasso.coefficients <- predict(lasso.model, type="coefficients", s=lasso.lambda.1se)
+print(as.matrix(lasso.coefficients))
+## compare cross-validated MSE for both the options
+mse_min <- lasso.cv.out$cvm[lasso.cv.out$lambda == lasso.lambda.min]
+mse_1se <- lasso.cv.out$cvm[lasso.cv.out$lambda == lasso.lambda.1se]
+cat("Comparison of cross-validated MSE with 2 versus 5 removed features: ", mse_min, mse_1se)
+```
+LASSO with $\lambda_{\text{min}}$ selects the model that achieves the best predictive performance on unseen data. LASSO with $\lambda_{\text{1se}}$ reflects a trade-off between predictive accuracy and interpretability, favoring interpretability by retaining the most informative features while removing those with marginal contributions. In our example, this results in a roughly 10% increase in MSE in exchange for the removal of three additional features.
+
+Our model can be further fine-tuned, for example, by including interactions.
+
+```{r interactions}
+## consider only two most significant predictors and their interaction
+## this model seems to perform better that previous lm.fit.exclude
+lm.fit.int <- lm(medv ~ lstat+rm+lstat:rm, data=Boston)
+summary(lm.fit.int)
+
+## confirm with a hold out test
+set.seed(1)
+sample <- sample(c(TRUE, FALSE), nrow(Boston), replace=TRUE, prob=c(0.7, 0.3))
+ 
+train  <- Boston[sample, ]
+test   <- Boston[!sample, ]
+ 
+# eval a linear model on unseen data
+evalLM<-function(m,d){
+  predictions<-predict(m, newdata = d)
+  rss <- sum((predictions - d$medv)^2)
+  tss <- sum((mean(d$medv)-d$medv)^2)
+  rsquared <- 1-rss/tss
+  p <- length(coef(m)) - 1
+  rsquared_adj <- 1- (rss/(nrow(d)-p-1))/(tss/(nrow(d)-1))
+  mse <- mean((d$medv - predictions)^2)
+  return(signif(c(rsquared,rsquared_adj,mse),4))
+}
+
+lm.train.exclude <- lm(formula=medv~. -age -indus, data = train)
+paste("The model without age and indus (11 predictors) and its R2, adjR2 and MSE:", paste(evalLM(lm.train.exclude,test),collapse = ", "))
+
+lm.train.int <- lm(formula=medv~lstat+rm+lstat:rm, data = train) 
+paste("The interaction model (3 predictors) and its R2, adjR2 and MSE:", paste(evalLM(lm.train.int,test),collapse = ", "))
+
+## choose the brute force direction, all pairwise interactions filtered with lasso
+library(Matrix)
+X_sparse <- as(Matrix(model.matrix(medv ~ .^2, data=Boston)), "CsparseMatrix")
+lasso.int.model <- glmnet(as.matrix(Boston[,-ncol(Boston)]),Boston$medv,alpha=1, lambda=lambda_grid, standardize=TRUE)
+lasso.int.cv <- cv.glmnet(X_sparse, Boston$medv, alpha = 1)
+lasso.lambda.1se <- lasso.int.cv$lambda.1se
+lasso.coefficents<-predict(lasso.int.cv, type="coefficients", s=lasso.lambda.1se)
+active_features <- rownames(lasso.coefficents)[which(lasso.coefficents != 0)]
+active_features <- setdiff(active_features, "(Intercept)")
+cat("Cross-validated MSE with", length(active_features), "features including pairwise interactions: ", lasso.cv.out$cvm[lasso.int.cv$lambda == lasso.lambda.1se])
+
+## use the selected features and their interactions in a linear model
+formula_int <- as.formula(paste("medv ~", paste(active_features, collapse = " + ")))
+lm.int.lasso <- lm(formula_int, data = Boston)
+summary(lm.int.lasso)
+```
+First, we demonstrated that the interaction between the two strongest predictors contributes more to the model than the remaining predictors. The model including just these two features and their interaction outperforms the model obtained through feature selection. At the same time, increasing in the number of interactions—and consequently the number of predictors—retained by LASSO leads to only a practically negligible improvement in predictive performance. Ultimately, the user must decide whether an approximately 3.5% reduction in MSE justifies the addition of 57 extra predictors.
+
+## Summary
+
+To avoid overfitting and improve the simplicity and interpretability of a model, only relevant features should be used. We have shown four different approaches to feature selection: pairwise correlations, p-values, stepwise regression and lasso. 
+
+The method based on **pairwise correlations** recommends keeping all variables but fails to control for multicollinearity between predictors. The other methods all agreed that **two features should be removed** from the model. Using **coefficient p-values** for variable selection worked well in our case, however, it is not considered a standard or recommended practice. Significance of a variable does not necessarily imply practical importance: a small p-value may indicate statistical significance, but the effect size might be trivial in a real-world context and vice versa. Multiple comparisons may lead to false positives (Type I errors) due to the problem of multiple comparisons (you might mistakenly include variables that have a low p-value by chance alone). 
+
+Similarly, **stepwise selection** should be used judiciously, as it often suffers from overfitting. Stepwise procedures are data-driven and may select variables that happen to perform well on the specific dataset used for modeling but do not generalize to new, unseen data. **Lasso**, when tuned properly using techniques like cross-validation, generally achieves a better balance between model complexity and predictive performance.
+
+**Statistical and practical significance may lead to different model choices.** With sufficiently large datasets, even negligible improvements can become statistically significant. The final inclusion of feature interactions demonstrates that feature selection should not be considered in isolation but rather in conjunction with the other modeling techniques discussed in this course. The super simple model medv~lstat+rm+lstat:rm proves to be a highly effective solution to the problem of house price prediction.
+
+<!--  Notice that if we deal with all pairwise interactions the size of Boston dataset may suddenly not be sufficient. In the high-dimensional model with all pairwise interactions, many predictors selected by LASSO are statistically insignificant when refit with lm(). This occurs because the large number of correlated features makes it difficult to isolate individual effects, reducing the power of traditional significance tests. Nevertheless, these predictors can still contribute to practical significance, as reflected by slight improvements in predictive performance. In other words, the model demonstrates some practical value, but classical inference cannot reliably confirm significance for each coefficient.  -->
