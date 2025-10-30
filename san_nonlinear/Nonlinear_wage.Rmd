@@ -5,7 +5,7 @@ output:
     df_print: paged
 ---
 
-This notebook demonstrates that many of the complex non-linear fitting procedures shown in the lecture can be easily implemented in R. The notebook deals with the same dataset that illustrates the accompanying lecture on non-linear regression, the Wage dataset. The notebook directly stems from ISLR's Chapter 7 Lab: Non-linear Modeling.
+This notebook demonstrates that many of the complex non-linear fitting procedures discussed in the lecture can be easily implemented in R. The notebook uses the same Wage dataset featured in the accompanying lecture on non-linear regression and is directly inspired by ISLR's Chapter 7 Lab: Non-linear Modeling.
 
 ```{r prepare, echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
 library(ISLR)
@@ -20,14 +20,6 @@ myRMSE = function(m, o){
 }
 ```
 
-```{r}
-help(Wage)
-```
-
-```{r}
-head(Wage)
-```
-
 ## Get familiar with the Wage dataset
 ```{r}
 help(Wage) # Wage and other data for a group of 3000 male workers in the Mid-Atlantic region
@@ -35,13 +27,6 @@ summary(Wage) # learn the structure of the dataset
 Wage$region<-NULL # no information in region variable, remove it, may cause errors in later models
 plot(age,wage) # remember a few relationships/plots from the lecture
 plot(education,wage)
-plot(year,wage)
-boxplot(year, wage)
-plot(maritl,wage)
-plot(race,wage)
-plot(jobclass,wage)
-plot(health,wage)
-plot(health_ins,wage)
 ```
 
 ## Polynomial regression
@@ -88,7 +73,7 @@ coef(summary(fit.5))
 (-11.983)^2 # show that the square of the t-stat for the quadratic model equals the F-stat for the quadratic model taken from ANOVA
 ```
 
-The models must be nested (the set of predictors of a previous model has to be a subset of predictors in its successor model). ANOVA performs a sequence of F-tests, they always compare the simpler model to the more complex model that follows it. The first p-value (<2.2e-16) indicates that a linear fit is not sufficient. The quadratic model seems to be insufficient too (p-value 0.0017). The subsequent p-value is around 0.05 and the last one is large. Consequently, either a cubic or a quadratic polynomial appear to reasonably fit the data.
+The models must be nested (the set of predictors of a previous model has to be a subset of predictors in its successor model). ANOVA performs a sequence of F-tests, they always compare the simpler model to the more complex model that follows it. The first p-value (<2.2e-16) indicates that a linear fit is not sufficient. The quadratic model seems to be insufficient too (p-value 0.0017). The subsequent p-value is around 0.05 and the last one is large. Consequently, either a cubic or a quartic polynomial appear to reasonably fit the data.
 
 Eventually, notice one of the advantages of orthogonal polynomials. Instead of using the anova() function we could have obtained the same result directly from the degree-5 model. The p-values there match the ANOVA p-values, the square of t-statistics are equal to ANOVA F-statistics. This relationship between the statistics generally holds in simple linear regression only (single independent variable).
 
@@ -162,7 +147,7 @@ legend("topright",legend=c("Span=0.2","Span=0.5"),col=c("red","blue"),lty=1,lwd=
 
 ## GAMs
 
-The ultimate task is to propose a multivariate model that employs all the relevant predictors with an appropriate choice of their non-linear basis. When dealing with precomputed basis functions (bs,ns), we can simply combine them using the lm() function and the least square method. However, neither smoothing splines nor local regression deals with basis functions, gam library has to be used to employ them into a big regression model.
+The ultimate task is to propose a multivariate model that employs all the relevant predictors with an appropriate choice of their non-linear basis. When dealing with precomputed basis functions (bs,ns), we can simply combine them in a single lm() call and fit the model using least squares. However, smoothing splines and local regression do not provide explicit basis functions. In these cases, the gam library must be used to include them as components in a larger regression model.
 
 ```{r}
 gam1=lm(wage~ns(year,4)+ns(age,5)+education,data=Wage) # simple linear model when using bs() and ns()
@@ -195,23 +180,6 @@ myRMSE(pred,Wage$wage) # the cross-validated RMSE of the model based on year, ag
 
 ## Further questions to answer (homework):
 
-1. Have a look at other predictors. What treatment would you recommend for them?
-year: continuous but with few unique values → treat as linear or factor (likely linear).
-maritl: categorical → treat as factor.
-race: categorical → treat as factor.
-education: categorical → factor.
-jobclass: binary → treat as factor.
-health: binary → treat as factor.
-health_ins: binary → treat as factor.
-logwage: target variable; excluded as predictor.
-
-2. Which non-linear model would you recommend for wage prediction (considering all the predictors)? Show a model that improves the gam model tested in the last chunk.
-
-```{r}
-# my_gam.m1=gam(wage~year+s(age,5)+education+maritl+race+jobclass+health+health_ins,data=Wage)
-my_gam.m1=gam(wage~year+s(age,5)+education+maritl+race+jobclass+health+health_ins,data=Wage)
-my_gam.m2=gam(wage~year+s(age,5)+education+maritl+race+jobclass+health,data=Wage)
-my_gam.m3=gam(wage~year+s(age,5)+education+jobclass+health,data=Wage)
-anova(gam.m1,gam.m2,gam.m3,my_gam.m1,my_gam.m2,my_gam.m3, test="F")
-
-```
+1. Is there any way to further improve the model tested in the last chunk using only these three predictors?
+2. Have a look at other predictors. What treatment would you recommend for them?
+3. Which non-linear model would you recommend for wage prediction considering all the predictors? Show a model that improves the gam model tested in the last chunk.
