@@ -26,6 +26,7 @@ my_accuracy <- function(preds, reference, print_confmat=FALSE){
 ```
 
 ## Read the data
+
 The dataset holds data on weight, height and gender of 10,000 individuals and was taken from <https://www.kaggle.com/mustafaali96/weight-height>.
 
 ```{r read the data}
@@ -41,6 +42,7 @@ glimpse(life_data)
 ```
 
 ## Analyse height only
+
 First, consider only the height. Let us see its relationship with gender.
 
 ```{r show height}
@@ -90,12 +92,12 @@ lda_decisionBoundary <- gender_pred_df %>%
 
 paste("The LDA decision boundary in height:", round(lda_decisionBoundary,2))
 ```
-In this case, the method simply thresholds the samples: those with a height below 168.57 cm are classified as women, while samples with a height of 168.57 cm or above are classified as men. Despite its simplicity, the method reaches the train accuracy of 83\%. 
+
+In this case, the method simply thresholds the samples: those with a height below 168.57 cm are classified as women, while samples with a height of 168.57 cm or above are classified as men. Despite its simplicity, the method reaches the train accuracy of 83%.
 
 ### Understand LDA by arriving at the same results yourself
-The core of LDA is the Bayes theorem: 
-$$Pr(Male|Height) = \frac{Pr(Height|Male)} {Pr(Height|Male) + Pr(Height|Female)}$$
-Note that the above expression is a simplified form of the theorem since the prior probabilities of genders are the same, i.e., $P(Male)=P(Female)$. LDA further assumes the distributions of heights in each gender to be normal $Pr(Height|Male) \sim \mathcal{N}(\mu,\sigma^2)$. All you need to do is to estimate parameters of the normal distributions and use them in the Bayes formula.
+
+The core of LDA is the Bayes theorem: $$Pr(Male|Height) = \frac{Pr(Height|Male)} {Pr(Height|Male) + Pr(Height|Female)}$$ Note that the above expression is a simplified form of the theorem since the prior probabilities of genders are the same, i.e., $P(Male)=P(Female)$. LDA further assumes the distributions of heights in each gender to be normal $Pr(Height|Male) \sim \mathcal{N}(\mu,\sigma^2)$. All you need to do is to estimate parameters of the normal distributions and use them in the Bayes formula.
 
 ```{r LDA via Bayes formula, echo=FALSE}
 # men and women normal distribution parameters
@@ -124,9 +126,11 @@ my_accuracy(gender_pred, life_data$Gender)
 (mu_f + mu_m) / 2
 lda_decisionBoundary
 ```
+
 Both the decision boundary and accuracy are the same as in the lda() run.
 
-### Plot the LDA decision boundary 
+### Plot the LDA decision boundary
+
 ```{r plot the LDA decision boundary, warning=FALSE}
 # Create normal approximations of our data (i.e the "ideal data") that LDA internally works with
 height_seq <- seq(min(life_data$Height), max(life_data$Height), length.out=nrow(life_data)/2)
@@ -155,7 +159,9 @@ life_data %>% ggplot(aes(x=Height, fill=Gender)) +
 ```
 
 ### Work with both height and weight
-Now, let us include both the features in our LDA model. 
+
+Now, let us include both the features in our LDA model.
+
 ```{r LDA with two predictors}
 # First, observe, how the multivariate normal distributions of Height + Weight looks
 life_data %>%
@@ -179,12 +185,13 @@ decisionplot(lda_hw, life_data, class = "Gender", main = "LDA", resolution=200)
 # For details refer to "Introduction to statistical learning in R", page 142
 
 ```
-With weight, the accuracy improves to nearly 92\%. The decision boundary is linear. The coefficients of linear discriminants returned by the lda() function represent the weights used to transform the predictor variables into a new space where the classes are best separated. Additionally, they represent the normal vector to the decision boundary, i.e., the vector that is perpendicular to this boundary. 
+
+With weight, the accuracy improves to nearly 92%. The decision boundary is linear. The coefficients of linear discriminants returned by the lda() function represent the weights used to transform the predictor variables into a new space where the classes are best separated. Additionally, they represent the normal vector to the decision boundary, i.e., the vector that is perpendicular to this boundary.
 
 ### LDA with two predictors perfomed with the Bayes formula
 
-With two features, the Bayes formula extends to:
-$Pr(Male|Height,Weight) = \frac{Pr(Height,Weight|Male)} {Pr(Height,Weight|Male) + Pr(Height,Weight|Female)}$
+With two features, the Bayes formula extends to: $Pr(Male|Height,Weight) = \frac{Pr(Height,Weight|Male)} {Pr(Height,Weight|Male) + Pr(Height,Weight|Female)}$
+
 ```{r LDA with two features via Bayes formula}
 # estimate parameters of distributions, substitute them into the Bayes formula
 library(mvtnorm)
@@ -223,11 +230,13 @@ decisionplot(qda_res, life_data, class = "Gender", main = "QDA", resolution=200)
 qda_res$scaling # both the genders scale nearly equally (scaling transforms the observations so that within-group covariance matrices are spherical)
 var(as.matrix(subset(life_data, Gender=="Male",2:3)) %*% qda_res$scaling[,,"Male"]) # after scaling, the group variances equal 1 and covariances 0
 ```
+
 QDA reaches approximately the same train accuracy as LDA, it seems that additional complexity does not help much. The decision boundary in QDA can take the form of parabolas, ellipses, or hyperbolas in 2D space, or their higher-dimensional equivalents. In our case it is close to linear as the class covariance matrices do not differ much.
 
 ## Logistic regression
 
 Finally, we will perform both the previously solved classification tasks with logistic regression. We will start with the simple height model.
+
 ```{r logistic regression with height}
 # run Logistic regression - start with a simple Height model
 lr <- glm(Gender ~ Height, life_data, family=binomial)
@@ -271,9 +280,11 @@ sigmoid_data %>%
   ylab("P(Gender=Male|Height)")
 
 ```
+
 The logistic regression decision boundary as well as train accuracy nearly perfectly match the outcomes obtained by LDA. Both the methods have sufficient amount of data to learn, the problem is simple, the conceptual differences between methods do not matter in this task.
 
 ### Fit LR with both Height and Weight
+
 ```{r LR with two predictors}
 lr_hw <- glm(Gender ~ ., life_data, family=binomial)
 lr_hw
@@ -292,9 +303,17 @@ decisionplot(lr_hw, life_data, class = "Gender", main = "Logistic regression", r
 # Question: Why is the logistic regression decision boundary linear? Can you derive the equation?
 # HINT: Refer again to the equation of LR. What probability do the points lying on the decision boundary have?
 ```
+
 Again, the decision boundary and train accuracy nearly perfectly match the outcomes obtained by LDA. Let us compare the decision boundary slope from the coefficients. In LDA, the normalized normal vector is `r coef(lda_hw)/sqrt(sum(coef(lda_hw)^2))`, in LR the same vector equals `r coef(lr_hw)[-1]/sqrt(sum(coef(lr_hw)[-1]^2))`. The vectors can be reached from the coefficents obtained in both the methods.
 
 ## Independent work
-1. Which method is expected to perform best on the test data in this task (LDA, QDA or LR)? Answer without running any tests, using only the assumptions underlying each method.
-2. Experimentally verify your answer. Note that you may need to work with different (and sometimes very small) training sets to observe any differences, as you have already seen that for 10,000 samples the differences can be negligible.
-3. Compare the methods in terms of their robustness to outliers. Begin with a brief theoretical justification, then verify your conclusions experimentally.
+
+1.  Which method is expected to perform best on the test data in this task (LDA, QDA or LR)? Answer without running any tests, using only the assumptions underlying each method. If the LDA assumptions truly hold (class-conditional normals and equal covariance matrices),
+
+-   LDA is the Bayes-optimal linear rule — it will have the smallest classification error among linear rules under those assumptions.
+-   Logistic Regression (LR) is a discriminative model that estimates the decision boundary directly; with enough data it will perform similarly to LDA when the LDA assumptions hold.
+-   QDA is more flexible (allows different covariances) so it has more parameters. If the true covariances are equal (as in this dataset), QDA adds unnecessary flexibility and can overfit when the training set is small. With very large training sets QDA can match LDA/LR.
+-   Conclusion: because the notebook data meets LDA assumptions, LDA (or LR) is expected to generalize best on test data for small-to-moderate training sizes; QDA may overfit when training data are small.
+
+2.  Experimentally verify your answer. Note that you may need to work with different (and sometimes very small) training sets to observe any differences, as you have already seen that for 10,000 samples the differences can be negligible.
+3.  Compare the methods in terms of their robustness to outliers. Begin with a brief theoretical justification, then verify your conclusions experimentally.
