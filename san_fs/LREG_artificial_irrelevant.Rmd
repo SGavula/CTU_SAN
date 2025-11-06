@@ -154,4 +154,48 @@ Irrelevant features cause overfitting and make our models work worse on unseen d
 **Further questions and tasks:**
 
 1. Show how the previously learned feature selection methods (p-values, stepwise selection, shrinkage) work in this case. Clearly demonstrate whether they work well/fail and explain why. Play with several different random generator seeds.
+
+
+```{r}
+lm.step.both <- stepAIC(lm.all, direction="both")
+```
+
+```{r}
+lm.step.both
+```
+
+```{r}
+myRMSE(predict(lm.step.both,d_test),d_test$out)
+```
+
+```{r}
+library(glmnet)
+X <- as.matrix(d[, 1:100])
+y <- d$out
+lasso.cv <- cv.glmnet(X, y, alpha = 1)
+
+X_test <- as.matrix(d_test[, 1:100])
+y_test <- d_test$out
+
+pred_lasso <- predict(lasso.cv, s = "lambda.min", newx = X_test)
+myRMSE(pred_lasso, y_test)
+```
+
+#### p-value
+- In the lab, we selected variables based on their p-values (p < 0.05).
+- However, this approach has two major issues:
+  1. Because we test 100 predictors independently at alpha = 0.05, we expect about five false positives by chance, and we cannot tell which ones they are.
+  2. Because all predictors are random noise, any variable that appears significant is a false positive.
+
+#### Stepwise selection
+- The resulting model has RMSE = 1.29, which is worse than the model based on p-values.
+- It selects variables that minimize AIC on the training data, but since all predictors are irrelevant, the selection is random and unstable.
+
+#### Lasso
+- LASSO shrinks irrelevant coefficients toward zero, producing a model similar to the zero model, which is optimal in this experiment.
+
+
 2. Describe step by step the correct way of model comparison procedure through cross-validation that was incorrectly implemented above. You can also implement the procedure, however, the implementation is optional only.
+- The previous cross-validation was done incorrectly because the model was trained on the entire dataset before testing. That means we tested the model on the same data it was trained on.
+- The correct way how to implement it is to repeat the training and testing process for each fold. In every iteration, use only the training part of the data to train the model, then test it on the remaining fold. Finally, average the performance across all folds to get estimate of how the model really performs.
+
