@@ -92,7 +92,7 @@ summary(poiss_reg)
 preds <- predict(poiss_reg, data)
 # Recall, how to change the linear regression output to the actual response
 # TODO add your code here
-preds <- ______
+preds <- exp(preds)
 
 # Use the predictions to plot the Poisson regression fit
 # compare with smoothed conditional mean household size
@@ -117,7 +117,7 @@ The model obviously improves the null model (Household.Head.Age has a significan
 
 # Solution: fit the linear regression again, but this time with the glm() function
 # TODO decide the glm family for linear model, hint: help(family)
-linreg_glm <- glm(Total.Number.of.Family.members ~ Household.Head.Age, family = ______, data=data)
+linreg_glm <- glm(Total.Number.of.Family.members ~ Household.Head.Age, family = 'gaussian', data=data)
 # Compare the coefficients with the lm() output 
 summary(linreg_glm)
 
@@ -133,7 +133,7 @@ Poisson regression (slightly) helps. Let us add more flexibility into our Poisso
 # Look at the data and the first Poisson regression fit.
 # TODO put the second order age polynomial into the model
 # Do you think the fit needs more flexibility? If yes, see Further questions
-poiss_reg2 <- glm(Total.Number.of.Family.members ~ ______, family = 'poisson', data=data)
+poiss_reg2 <- glm(Total.Number.of.Family.members ~ poly(Household.Head.Age, 2), family = 'poisson', data=data)
 
 # Make predictions. Care for the correct transformation the outputs
 preds2 <- predict(poiss_reg2, data)
@@ -160,4 +160,128 @@ Obviously, the non-linear term brings further improvement.
 ##  Further questions: 
 
 1. Show how to refine the model and increase its performance even further. Hint: You may consider other non-linear forms, different link functions and regression types as well as the region feature that has been kept away until now.
+
+```{r}
+library(splines)
+library(gam)
+# What we tried
+# linreg_glm <- glm(Total.Number.of.Family.members ~ Household.Head.Age, family = 'gaussian', data=data)
+# poiss_reg <- glm(Total.Number.of.Family.members ~ Household.Head.Age, family = 'poisson', data=data)
+# poiss_reg2 <- glm(Total.Number.of.Family.members ~ poly(Household.Head.Age, 2), family = 'poisson', data=data)
+
+poiss_reg3 <- glm(Total.Number.of.Family.members ~ poly(Household.Head.Age, 3), family = 'poisson', data=data)
+poiss_reg4 <- glm(Total.Number.of.Family.members ~ poly(Household.Head.Age, 4), family = 'poisson', data=data)
+poiss_reg5 <- glm(Total.Number.of.Family.members ~ poly(Household.Head.Age, 5), family = 'poisson', data=data)
+anova(poiss_reg2, poiss_reg3, poiss_reg4, poiss_reg5)
+
+# Test with anova, the result is that polynom with third degree is the best
+
+# poiss_reg5 <- glm(Total.Number.of.Family.members ~ Household.Head.Age, family = 'binomial', data=data) - Error the output of binomial distribution is between 0 and 1 but Total.Number.of.Family.members are integers
+# poiss_reg5 <- glm(Total.Number.of.Family.members ~ Household.Head.Age, family = 'quasipoisson', data=data)  - THe result aic is NA
+
+poiss_reg6 <- glm(Total.Number.of.Family.members ~ poly(Household.Head.Age, 2), family = 'gaussian', data=data)
+poiss_reg7 <- glm(Total.Number.of.Family.members ~ poly(Household.Head.Age, 3), family = 'gaussian', data=data) # maybe anova test
+# Natural spline (df = degrees of freedom)
+poiss_reg8 <- glm(Total.Number.of.Family.members ~ ns(Household.Head.Age, df = 3), 
+                    family = 'gaussian', data = data)
+
+# GAM (Generalized Additive Model) - smooth spline
+poiss_reg9 <- gam(Total.Number.of.Family.members ~ s(Household.Head.Age), 
+                 family = gaussian(), data = data)
+
+poiss_reg10 <- glm(Total.Number.of.Family.members ~ ns(Household.Head.Age, df = 3), 
+                    family = 'poisson', data = data)
+
+# GAM (Generalized Additive Model) - smooth spline
+poiss_reg11 <- gam(Total.Number.of.Family.members ~ s(Household.Head.Age), 
+                 family = poisson(), data = data)
+
+poiss_reg12 <- glm(Total.Number.of.Family.members ~ Household.Head.Age, 
+                  family = poisson(link = "sqrt"), data = data)
+
+# Poisson with identity link (less common, but worth trying)
+poiss_reg13 <- glm(Total.Number.of.Family.members ~ Household.Head.Age, 
+                      family = poisson(link = "identity"), data = data)
+
+# Poisson with region (additive)
+poiss_reg14 <- glm(Total.Number.of.Family.members ~ poly(Household.Head.Age, 2) + Region, family = 'poisson', data = data)
+
+# Poisson with region (interaction)
+poiss_reg15 <- glm(Total.Number.of.Family.members ~ poly(Household.Head.Age, 2) * Region, family = 'poisson', data = data)
+
+# GAM with region
+poiss_reg16 <- gam(Total.Number.of.Family.members ~ s(Household.Head.Age) + Region, family = poisson(), data = data)
+
+# linreg_glm$aic
+# poiss_reg2$aic
+# poiss_reg3$aic
+# poiss_reg4$aic
+# poiss_reg5$aic
+# poiss_reg6$aic
+# poiss_reg7$aic
+# poiss_reg8$aic
+# poiss_reg9$aic
+# poiss_reg10$aic
+# poiss_reg11$aic
+# poiss_reg12$aic
+# poiss_reg13$aic
+# poiss_reg14$aic
+# poiss_reg15$aic
+# poiss_reg16$aic
+```
+
+```{r}
+result_poly <- data.frame(
+  Model = c("Linear GLM", "Poisson (poly 2)", "Poisson (poly 3)", 
+            "Poisson (poly 4)", "Poisson (poly 5)"),
+  AIC = c(linreg_glm$aic, poiss_reg2$aic, poiss_reg3$aic, 
+          poiss_reg4$aic, poiss_reg5$aic)
+)
+result_poly
+```
+
+```{r}
+poiss_reg_sp_df3 <- glm(Total.Number.of.Family.members ~ bs(Household.Head.Age, df = 3), family = 'poisson', data = data)
+poiss_reg_sp_df4 <- glm(Total.Number.of.Family.members ~ bs(Household.Head.Age, df = 4), family = 'poisson', data = data)
+poiss_reg_sp_df5 <- glm(Total.Number.of.Family.members ~ bs(Household.Head.Age, df = 5), family = 'poisson', data = data)
+result_splines <- data.frame(
+  Model = c("Linear GLM", "Poisson (poly 3)", "Poisson (splines df 3)", 
+            "Poisson (splines df 4)", "Poisson (splines df 5)"), 
+  AIC = c(linreg_glm$aic, poiss_reg3$aic, poiss_reg_sp_df3$aic, poiss_reg_sp_df4$aic, poiss_reg_sp_df5$aic)
+)
+result_splines
+```
+
+```{r}
+# GAM with default smoothing (automatic df selection)
+gam_default <- gam(Total.Number.of.Family.members ~ s(Household.Head.Age), 
+                   family = poisson(), data = data)
+
+# GAM with specified degrees of freedom (for fair comparison)
+gam_df3 <- gam(Total.Number.of.Family.members ~ s(Household.Head.Age, 4), 
+               family = poisson(), data = data)
+
+# GAM with more flexibility
+gam_df5 <- gam(Total.Number.of.Family.members ~ s(Household.Head.Age, 6), 
+               family = poisson(), data = data)
+
+result_gam <- data.frame(
+  Model = c("Linear GLM", "Poisson (poly 3)", "Poisson (gam default)", 
+            "Poisson (gam df 3)", "Poisson (gam df 5)"), 
+  AIC = c(linreg_glm$aic, poiss_reg3$aic, gam_default$aic, gam_df3$aic, gam_df5$aic)
+)
+result_gam
+```
+
+```{r}
+poiss_region_feature1 <- glm(Total.Number.of.Family.members ~ Region, family = 'poisson', data = data)
+poiss_region_feature2 <- glm(Total.Number.of.Family.members ~ poly(Household.Head.Age, 3) + Region, family = 'poisson', data = data)
+result_feature <- data.frame(
+  Model = c("Linear GLM", "Poisson (poly 3)", "Poisson (region default)", 
+            "Poisson (poly df 3 + region)"), 
+  AIC = c(linreg_glm$aic, poiss_reg3$aic, poiss_region_feature1$aic, poiss_region_feature2$aic)
+)
+result_feature
+```
+
 2. Compare the models you considered with different criteria and understand how far they match or disagree. Finally, recommend the best model and write a justification for this recommendation.
