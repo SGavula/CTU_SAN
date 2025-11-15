@@ -7765,8 +7765,8 @@ The deadline is specified there.</p>
 Dep. Variable:                      y   R-squared:                       0.253
 Model:                            OLS   Adj. R-squared:                  0.242
 Method:                 Least Squares   F-statistic:                     22.16
-Date:                Mon, 10 Nov 2025   Prob (F-statistic):           2.13e-12
-Time:                        13:06:25   Log-Likelihood:                -264.40
+Date:                Sat, 15 Nov 2025   Prob (F-statistic):           2.13e-12
+Time:                        08:40:22   Log-Likelihood:                -264.40
 No. Observations:                 200   AIC:                             536.8
 Df Residuals:                     196   BIC:                             550.0
 Df Model:                           3                                         
@@ -7797,8 +7797,8 @@ Model:                            GLM   Df Residuals:                      196
 Model Family:                Gaussian   Df Model:                            3
 Link Function:               Identity   Scale:                         0.84055
 Method:                          IRLS   Log-Likelihood:                -264.40
-Date:                Mon, 10 Nov 2025   Deviance:                       164.75
-Time:                        13:06:25   Pearson chi2:                     165.
+Date:                Sat, 15 Nov 2025   Deviance:                       164.75
+Time:                        08:40:22   Pearson chi2:                     165.
 No. Iterations:                     3   Pseudo R-squ. (CS):             0.2829
 Covariance Type:            nonrobust                                         
 ==============================================================================
@@ -7893,10 +7893,10 @@ work          -0.0024      0.006     -0.410      0.682      -0.014       0.009
 <th>Method:</th> <td>IRLS</td> <th>  Log-Likelihood:    </th> <td> -293.60</td>
 </tr>
 <tr>
-<th>Date:</th> <td>Mon, 10 Nov 2025</td> <th>  Deviance:          </th> <td>  220.62</td>
+<th>Date:</th> <td>Sat, 15 Nov 2025</td> <th>  Deviance:          </th> <td>  220.62</td>
 </tr>
 <tr>
-<th>Time:</th> <td>13:06:26</td> <th>  Pearson chi2:      </th> <td>  221.</td>
+<th>Time:</th> <td>08:40:28</td> <th>  Pearson chi2:      </th> <td>  221.</td>
 </tr>
 <tr>
 <th>No. Iterations:</th> <td>3</td> <th>  Pseudo R-squ. (CS):</th> <td>1.254e-05</td>
@@ -7962,8 +7962,8 @@ work          -0.0024      0.006     -0.410      0.682      -0.014       0.009
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h3 id="Model-summary"><strong>Model summary</strong><a class="anchor-link" href="#Model-summary">¶</a></h3><p>The ordinary linear regression model explains approximately 25% of the variance in the response variable (R² = 0.253, adjusted R² = 0.242). The overall F-statistic (22.16, p &lt; 2.13e-12) indicates that at least one predictor significantly contributes to the model.</p>
-<h3 id="Individual-p-tests-checks"><strong>Individual p-tests checks</strong><a class="anchor-link" href="#Individual-p-tests-checks">¶</a></h3><p>Based on individual p-tests:</p>
+<h4 id="Model-summary"><strong>Model summary</strong><a class="anchor-link" href="#Model-summary">¶</a></h4><p>The ordinary linear regression model explains approximately 25% of the variance in the response variable (R² = 0.253, adjusted R² = 0.242). The overall F-statistic (22.16, p &lt; 2.13e-12) indicates that at least one predictor significantly contributes to the model.</p>
+<h4 id="Individual-p-tests-checks"><strong>Individual p-tests checks</strong><a class="anchor-link" href="#Individual-p-tests-checks">¶</a></h4><p>Based on individual p-tests:</p>
 <ol>
 <li>The variable prog has a p-value of 0.254 (&gt; 0.05), and therefore this variable is not significant.</li>
 <li>The variable math has a p-value of 0.000 (&lt; 0.05), and therefore it is statistically significant.</li>
@@ -8018,12 +8018,28 @@ work          -0.0024      0.006     -0.410      0.682      -0.014       0.009
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=61585a3e">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=7be70e60">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
 <div class="jp-InputPrompt jp-InputArea-prompt">In [10]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">equidispersion_test</span><span class="p">(</span><span class="n">glm_poiss_model</span><span class="p">):</span>
+    <span class="n">dispersion</span> <span class="o">=</span> <span class="n">glm_poiss_model</span><span class="o">.</span><span class="n">deviance</span> <span class="o">/</span> <span class="n">glm_poiss_model</span><span class="o">.</span><span class="n">df_resid</span>
+    <span class="k">return</span> <span class="n">dispersion</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=61585a3e">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [11]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="c1"># TODO: add your code here</span>
@@ -8040,7 +8056,7 @@ work          -0.0024      0.006     -0.410      0.682      -0.014       0.009
 </div>
 <div class="jp-OutputArea jp-Cell-outputArea">
 <div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[10]:</div>
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[11]:</div>
 <div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/html" tabindex="0">
 <div>
 <style scoped="">
@@ -8102,11 +8118,12 @@ work          -0.0024      0.006     -0.410      0.682      -0.014       0.009
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [11]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [12]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="n">glm_poiss_math</span> <span class="o">=</span> <span class="n">sm</span><span class="o">.</span><span class="n">GLM</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">X_just_math</span><span class="p">,</span> <span class="n">family</span><span class="o">=</span><span class="n">sm</span><span class="o">.</span><span class="n">families</span><span class="o">.</span><span class="n">Poisson</span><span class="p">())</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">glm_poiss_math</span><span class="o">.</span><span class="n">summary</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Equidispersion test: "</span><span class="p">,</span> <span class="n">equidispersion_test</span><span class="p">(</span><span class="n">glm_poiss_math</span><span class="p">))</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">"AIC score for Poisson GLM model: "</span><span class="p">,</span> <span class="n">glm_poiss_math</span><span class="o">.</span><span class="n">aic</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">compareGLM</span><span class="p">(</span><span class="n">null_model</span><span class="p">,</span> <span class="n">glm_poiss_math</span><span class="p">))</span>
 </pre></div>
@@ -8128,8 +8145,8 @@ Model:                            GLM   Df Residuals:                      198
 Model Family:                 Poisson   Df Model:                            1
 Link Function:                    Log   Scale:                          1.0000
 Method:                          IRLS   Log-Likelihood:                -190.04
-Date:                Mon, 10 Nov 2025   Deviance:                       204.02
-Time:                        13:06:26   Pearson chi2:                     229.
+Date:                Sat, 15 Nov 2025   Deviance:                       204.02
+Time:                        08:40:43   Pearson chi2:                     229.
 No. Iterations:                     5   Pseudo R-squ. (CS):             0.3418
 Covariance Type:            nonrobust                                         
 ==============================================================================
@@ -8138,6 +8155,7 @@ Covariance Type:            nonrobust
 const         -5.3335      0.591     -9.021      0.000      -6.492      -4.175
 math           0.0862      0.010      8.902      0.000       0.067       0.105
 ==============================================================================
+Equidispersion test:  1.030410615217032
 AIC score for Poisson GLM model:  384.07618503564413
 === GLM Model Comparison (Likelihood Ratio Test) ===
 Log-likelihood (simple):   -293.600
@@ -8158,7 +8176,7 @@ None
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [12]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [13]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="n">X_math_prog</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
@@ -8174,7 +8192,7 @@ None
 </div>
 <div class="jp-OutputArea jp-Cell-outputArea">
 <div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[12]:</div>
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[13]:</div>
 <div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/html" tabindex="0">
 <div>
 <style scoped="">
@@ -8242,11 +8260,12 @@ None
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [13]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [14]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="n">glm_poiss_math_prog</span> <span class="o">=</span> <span class="n">sm</span><span class="o">.</span><span class="n">GLM</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">X_math_prog</span><span class="p">,</span> <span class="n">family</span><span class="o">=</span><span class="n">sm</span><span class="o">.</span><span class="n">families</span><span class="o">.</span><span class="n">Poisson</span><span class="p">())</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">glm_poiss_math_prog</span><span class="o">.</span><span class="n">summary</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Equidispersion test: "</span><span class="p">,</span> <span class="n">equidispersion_test</span><span class="p">(</span><span class="n">glm_poiss_math_prog</span><span class="p">))</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">compareGLM</span><span class="p">(</span><span class="n">glm_poiss_math</span><span class="p">,</span> <span class="n">glm_poiss_math_prog</span><span class="p">))</span>
 </pre></div>
 </div>
@@ -8267,8 +8286,8 @@ Model:                            GLM   Df Residuals:                      197
 Model Family:                 Poisson   Df Model:                            2
 Link Function:                    Log   Scale:                          1.0000
 Method:                          IRLS   Log-Likelihood:                -189.75
-Date:                Mon, 10 Nov 2025   Deviance:                       203.45
-Time:                        13:06:26   Pearson chi2:                     227.
+Date:                Sat, 15 Nov 2025   Deviance:                       203.45
+Time:                        08:40:48   Pearson chi2:                     227.
 No. Iterations:                     5   Pseudo R-squ. (CS):             0.3437
 Covariance Type:            nonrobust                                         
 ==============================================================================
@@ -8278,6 +8297,7 @@ const         -5.5781      0.677     -8.242      0.000      -6.905      -4.252
 prog           0.1233      0.163      0.755      0.450      -0.197       0.443
 math           0.0861      0.010      8.984      0.000       0.067       0.105
 ==============================================================================
+Equidispersion test:  1.0327471551162384
 === GLM Model Comparison (Likelihood Ratio Test) ===
 Log-likelihood (simple):   -190.038
 Log-likelihood (complex):  -189.753
@@ -8297,7 +8317,7 @@ None
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [14]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [15]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="n">X_math_work</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
@@ -8313,7 +8333,7 @@ None
 </div>
 <div class="jp-OutputArea jp-Cell-outputArea">
 <div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[14]:</div>
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[15]:</div>
 <div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/html" tabindex="0">
 <div>
 <style scoped="">
@@ -8381,7 +8401,7 @@ None
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [15]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [16]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="n">glm_poiss_math_work</span> <span class="o">=</span> <span class="n">sm</span><span class="o">.</span><span class="n">GLM</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">X_math_work</span><span class="p">,</span> <span class="n">family</span><span class="o">=</span><span class="n">sm</span><span class="o">.</span><span class="n">families</span><span class="o">.</span><span class="n">Poisson</span><span class="p">())</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span>
@@ -8406,8 +8426,8 @@ Model:                            GLM   Df Residuals:                      197
 Model Family:                 Poisson   Df Model:                            2
 Link Function:                    Log   Scale:                          1.0000
 Method:                          IRLS   Log-Likelihood:                -189.67
-Date:                Mon, 10 Nov 2025   Deviance:                       203.29
-Time:                        13:06:26   Pearson chi2:                     227.
+Date:                Sat, 15 Nov 2025   Deviance:                       203.29
+Time:                        08:40:54   Pearson chi2:                     227.
 No. Iterations:                     5   Pseudo R-squ. (CS):             0.3442
 Covariance Type:            nonrobust                                         
 ==============================================================================
@@ -8436,7 +8456,7 @@ None
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [16]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [17]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="n">coef</span> <span class="o">=</span> <span class="n">glm_poiss_math</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s1">'math'</span><span class="p">]</span>
@@ -8479,9 +8499,9 @@ None
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h4 id="Selecting-best-Poisson-GLM-model">Selecting best Poisson GLM model<a class="anchor-link" href="#Selecting-best-Poisson-GLM-model">¶</a></h4><p>From the previous analysis, only one predictor was statistically significant: math. Starting with the math-only Poisson model and comparing it to the null model, the math-only model significantly improves the fit (higher log-likelihood, lower AIC). Although individual tests suggested that the other two predictors (prog and work) are not significant, we nevertheless tested adding them. Both the likelihood ratio test (p-value &gt; 0.05) and AIC showed no improvement, so the simpler model with only math is preferred.</p>
-<h4 id="Interpretation-of-the-math-effect">Interpretation of the math effect<a class="anchor-link" href="#Interpretation-of-the-math-effect">¶</a></h4><p>The estimated coefficient for math is 0.0862. In a Poisson GLM with log link the effect is multiplicative: the incidence rate ratio (IRR) is  exp(0.0862)=1.09. That means, an increase of one point in the math score corresponds to an expected increase of about 9% in the number of awards</p>
-<h4 id="Comparing-Poisson-GLM-over-OLS">Comparing Poisson GLM over OLS<a class="anchor-link" href="#Comparing-Poisson-GLM-over-OLS">¶</a></h4><p>The dependent variable (number of awards) represents counts, which violates the normality assumption required for OLS. The Poisson GLM is theoretically more appropriate because it models counts directly and ensures non-negative fitted values via the log link. Technically, the Poisson model (math-only) also performs better on the available fit metrics: AIC decreased from 536.79 (OLS/Gaussian) to 384.07 (Poisson), and the log-likelihood increased from −264.40 (OLS) to −190.04 (Poisson). These indicate a better fit for the Poisson GLM (math-only).</p>
+<h4 id="Selecting-best-Poisson-GLM-model"><strong>Selecting best Poisson GLM model</strong><a class="anchor-link" href="#Selecting-best-Poisson-GLM-model">¶</a></h4><p>From the previous analysis, only one predictor was statistically significant: math. Starting with the math-only Poisson model and comparing it to the null model, the math-only model significantly improves the fit (higher log-likelihood, lower AIC). We also performed an equidispersion test to check overdispersion. The resulting dispersion value was close to 1, indicating that the Poisson assumption is appropriate for this model. Although individual tests suggested that the other two predictors (prog and work) are not significant, we nevertheless tested adding them. Both the likelihood ratio test (p-value &gt; 0.05) and AIC showed no improvement, so the simpler model with only math is preferred.</p>
+<h4 id="Interpretation-of-the-math-effect"><strong>Interpretation of the math effect</strong><a class="anchor-link" href="#Interpretation-of-the-math-effect">¶</a></h4><p>The estimated coefficient for math is 0.0862. In a Poisson GLM with log link the effect is multiplicative: the incidence rate ratio (IRR) is  exp(0.0862)=1.09. That means, an increase of one point in the math score corresponds to an expected increase of about 9% in the number of awards</p>
+<h4 id="Comparing-Poisson-GLM-over-OLS"><strong>Comparing Poisson GLM over OLS</strong><a class="anchor-link" href="#Comparing-Poisson-GLM-over-OLS">¶</a></h4><p>The dependent variable (number of awards) represents counts, which violates the normality assumption required for OLS. The Poisson GLM is theoretically more appropriate because it models counts directly and ensures non-negative fitted values via the log link. Technically, the Poisson model (math-only) also performs better on the available fit metrics: AIC decreased from 536.79 (OLS/Gaussian) to 384.07 (Poisson), and the log-likelihood increased from −264.40 (OLS) to −190.04 (Poisson). These indicate a better fit for the Poisson GLM (math-only).</p>
 </div>
 </div>
 </div>
@@ -8505,7 +8525,7 @@ For tools to do polynomial or spline transformations refer for example to sklear
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [17]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [18]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="n">cols</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"num_awards"</span><span class="p">,</span> <span class="s2">"prog"</span><span class="p">]</span>
@@ -8555,7 +8575,7 @@ For tools to do polynomial or spline transformations refer for example to sklear
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [18]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [19]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="c1"># Transforming prog variable to dummy variable</span>
@@ -8574,7 +8594,7 @@ For tools to do polynomial or spline transformations refer for example to sklear
 </div>
 <div class="jp-OutputArea jp-Cell-outputArea">
 <div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[18]:</div>
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[19]:</div>
 <div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/html" tabindex="0">
 <div>
 <style scoped="">
@@ -8654,7 +8674,7 @@ For tools to do polynomial or spline transformations refer for example to sklear
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [19]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [20]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="n">X_transformed_no_work</span> <span class="o">=</span> <span class="n">X_transformed_prog</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
@@ -8670,7 +8690,7 @@ For tools to do polynomial or spline transformations refer for example to sklear
 </div>
 <div class="jp-OutputArea jp-Cell-outputArea">
 <div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[19]:</div>
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[20]:</div>
 <div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/html" tabindex="0">
 <div>
 <style scoped="">
@@ -8744,11 +8764,12 @@ For tools to do polynomial or spline transformations refer for example to sklear
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [20]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [21]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="n">glm_poiss_no_work</span> <span class="o">=</span> <span class="n">sm</span><span class="o">.</span><span class="n">GLM</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">X_transformed_no_work</span><span class="p">,</span> <span class="n">family</span><span class="o">=</span><span class="n">sm</span><span class="o">.</span><span class="n">families</span><span class="o">.</span><span class="n">Poisson</span><span class="p">())</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">glm_poiss_no_work</span><span class="o">.</span><span class="n">summary</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Equidispersion test: "</span><span class="p">,</span> <span class="n">equidispersion_test</span><span class="p">(</span><span class="n">glm_poiss_no_work</span><span class="p">))</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">compareGLM</span><span class="p">(</span><span class="n">glm_poiss_math_work</span><span class="p">,</span> <span class="n">glm_poiss_no_work</span><span class="p">))</span>
 </pre></div>
 </div>
@@ -8769,8 +8790,8 @@ Model:                            GLM   Df Residuals:                      196
 Model Family:                 Poisson   Df Model:                            3
 Link Function:                    Log   Scale:                          1.0000
 Method:                          IRLS   Log-Likelihood:                -182.75
-Date:                Mon, 10 Nov 2025   Deviance:                       189.45
-Time:                        13:06:27   Pearson chi2:                     212.
+Date:                Sat, 15 Nov 2025   Deviance:                       189.45
+Time:                        08:41:08   Pearson chi2:                     212.
 No. Iterations:                     5   Pseudo R-squ. (CS):             0.3881
 Covariance Type:            nonrobust                                         
 ==============================================================================
@@ -8781,6 +8802,7 @@ math           0.0702      0.011      6.619      0.000       0.049       0.091
 prog_2         1.0839      0.358      3.025      0.002       0.382       1.786
 prog_3         0.3698      0.441      0.838      0.402      -0.495       1.234
 ==============================================================================
+Equidispersion test:  0.9665796934198643
 === GLM Model Comparison (Likelihood Ratio Test) ===
 Log-likelihood (simple):   -189.675
 Log-likelihood (complex):  -182.752
@@ -8800,7 +8822,7 @@ None
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [21]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [22]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.preprocessing</span><span class="w"> </span><span class="kn">import</span> <span class="n">PolynomialFeatures</span>
@@ -8822,7 +8844,7 @@ None
 </div>
 <div class="jp-OutputArea jp-Cell-outputArea">
 <div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[21]:</div>
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[22]:</div>
 <div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/html" tabindex="0">
 <div>
 <style scoped="">
@@ -8908,11 +8930,12 @@ None
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [22]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [23]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="n">glm_poiss_full_trans</span> <span class="o">=</span> <span class="n">sm</span><span class="o">.</span><span class="n">GLM</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">X_transformed_full</span><span class="p">,</span> <span class="n">family</span><span class="o">=</span><span class="n">sm</span><span class="o">.</span><span class="n">families</span><span class="o">.</span><span class="n">Poisson</span><span class="p">())</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">glm_poiss_full_trans</span><span class="o">.</span><span class="n">summary</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Equidispersion test: "</span><span class="p">,</span> <span class="n">equidispersion_test</span><span class="p">(</span><span class="n">glm_poiss_full_trans</span><span class="p">))</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">compareGLM</span><span class="p">(</span><span class="n">glm_poiss_no_work</span><span class="p">,</span> <span class="n">glm_poiss_full_trans</span><span class="p">))</span>
 </pre></div>
 </div>
@@ -8933,8 +8956,8 @@ Model:                            GLM   Df Residuals:                      194
 Model Family:                 Poisson   Df Model:                            5
 Link Function:                    Log   Scale:                          1.0000
 Method:                          IRLS   Log-Likelihood:                -175.17
-Date:                Mon, 10 Nov 2025   Deviance:                       174.29
-Time:                        13:06:27   Pearson chi2:                     189.
+Date:                Sat, 15 Nov 2025   Deviance:                       174.29
+Time:                        08:41:12   Pearson chi2:                     189.
 No. Iterations:                     5   Pseudo R-squ. (CS):             0.4327
 Covariance Type:            nonrobust                                         
 ==============================================================================
@@ -8947,6 +8970,7 @@ prog_2         0.9915      0.360      2.755      0.006       0.286       1.697
 prog_3         0.3136      0.442      0.710      0.478      -0.552       1.179
 work2         -0.0051      0.001     -3.631      0.000      -0.008      -0.002
 ==============================================================================
+Equidispersion test:  0.8983776440365637
 === GLM Model Comparison (Likelihood Ratio Test) ===
 Log-likelihood (simple):   -182.752
 Log-likelihood (complex):  -175.170
@@ -8956,6 +8980,225 @@ p-value:                   0.00051
 AIC (simple):              373.505
 AIC (complex):             362.340
 None
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=616fadba">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [24]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">X_transformed_full_2</span> <span class="o">=</span> <span class="n">X_transformed_prog</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<span class="n">poly_3</span> <span class="o">=</span> <span class="n">PolynomialFeatures</span><span class="p">(</span><span class="n">degree</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">include_bias</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">work_poly_3</span> <span class="o">=</span> <span class="n">poly_3</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">df</span><span class="p">[[</span><span class="s2">"work"</span><span class="p">]])</span>
+<span class="n">X_transformed_full_2</span><span class="p">[</span><span class="s2">"work"</span><span class="p">]</span> <span class="o">=</span> <span class="n">work_poly_3</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
+<span class="n">X_transformed_full_2</span><span class="p">[</span><span class="s2">"work2"</span><span class="p">]</span> <span class="o">=</span> <span class="n">work_poly_3</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span>
+<span class="n">X_transformed_full_2</span><span class="p">[</span><span class="s2">"work3"</span><span class="p">]</span> <span class="o">=</span> <span class="n">work_poly_3</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span>
+<span class="n">X_transformed_full_2</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+
+<span class="n">glm_poiss_full_trans_2</span> <span class="o">=</span> <span class="n">sm</span><span class="o">.</span><span class="n">GLM</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">X_transformed_full_2</span><span class="p">,</span> <span class="n">family</span><span class="o">=</span><span class="n">sm</span><span class="o">.</span><span class="n">families</span><span class="o">.</span><span class="n">Poisson</span><span class="p">())</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">glm_poiss_full_trans_2</span><span class="o">.</span><span class="n">summary</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Equidispersion test: "</span><span class="p">,</span> <span class="n">equidispersion_test</span><span class="p">(</span><span class="n">glm_poiss_full_trans_2</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">compareGLM</span><span class="p">(</span><span class="n">glm_poiss_full_trans</span><span class="p">,</span> <span class="n">glm_poiss_full_trans_2</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
+</div>
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
+<pre>                 Generalized Linear Model Regression Results                  
+==============================================================================
+Dep. Variable:                      y   No. Observations:                  200
+Model:                            GLM   Df Residuals:                      193
+Model Family:                 Poisson   Df Model:                            6
+Link Function:                    Log   Scale:                          1.0000
+Method:                          IRLS   Log-Likelihood:                -175.13
+Date:                Sat, 15 Nov 2025   Deviance:                       174.21
+Time:                        08:41:16   Pearson chi2:                     189.
+No. Iterations:                     5   Pseudo R-squ. (CS):             0.4329
+Covariance Type:            nonrobust                                         
+==============================================================================
+                 coef    std err          z      P&gt;|z|      [0.025      0.975]
+------------------------------------------------------------------------------
+const         -4.9432      0.708     -6.980      0.000      -6.331      -3.555
+math           0.0575      0.011      5.256      0.000       0.036       0.079
+work           0.1625      0.085      1.909      0.056      -0.004       0.329
+prog_2         0.9908      0.360      2.754      0.006       0.286       1.696
+prog_3         0.3192      0.442      0.722      0.470      -0.547       1.186
+work2         -0.0068      0.006     -1.071      0.284      -0.019       0.006
+work3       3.681e-05      0.000      0.268      0.788      -0.000       0.000
+==============================================================================
+Equidispersion test:  0.9026624765316161
+=== GLM Model Comparison (Likelihood Ratio Test) ===
+Log-likelihood (simple):   -175.170
+Log-likelihood (complex):  -175.134
+LR statistic:              0.071
+Degrees of freedom diff:   1
+p-value:                   0.78930
+AIC (simple):              362.340
+AIC (complex):             364.269
+None
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=d0ccc573">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [25]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">patsy</span><span class="w"> </span><span class="kn">import</span> <span class="n">dmatrix</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">statsmodels.api</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sm</span>
+
+<span class="n">X_spline_full</span> <span class="o">=</span> <span class="n">X_transformed_prog</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>  
+
+<span class="c1"># Generate cubic spline basis</span>
+<span class="n">spline_work</span> <span class="o">=</span> <span class="n">dmatrix</span><span class="p">(</span>
+    <span class="s2">"bs(work, df=2, degree=2, include_intercept=False)"</span><span class="p">,</span> 
+    <span class="p">{</span><span class="s2">"work"</span><span class="p">:</span> <span class="n">df</span><span class="p">[</span><span class="s2">"work"</span><span class="p">]},</span> 
+    <span class="n">return_type</span><span class="o">=</span><span class="s1">'dataframe'</span>
+<span class="p">)</span>
+
+<span class="c1"># Join spline columns to the design matrix</span>
+<span class="n">X_spline_full</span> <span class="o">=</span> <span class="n">X_spline_full</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">spline_work</span><span class="p">)</span>
+<span class="c1"># print(X_spline_full.head())</span>
+
+<span class="c1"># Fit Poisson GLM with spline-transformed</span>
+<span class="n">glm_poiss_spline</span> <span class="o">=</span> <span class="n">sm</span><span class="o">.</span><span class="n">GLM</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">X_spline_full</span><span class="p">,</span> <span class="n">family</span><span class="o">=</span><span class="n">sm</span><span class="o">.</span><span class="n">families</span><span class="o">.</span><span class="n">Poisson</span><span class="p">())</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">glm_poiss_spline</span><span class="o">.</span><span class="n">summary</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Equidispersion test:"</span><span class="p">,</span> <span class="n">equidispersion_test</span><span class="p">(</span><span class="n">glm_poiss_spline</span><span class="p">))</span>
+<span class="n">compareGLM</span><span class="p">(</span><span class="n">glm_poiss_full_trans</span><span class="p">,</span> <span class="n">glm_poiss_spline</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
+</div>
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
+<pre>                 Generalized Linear Model Regression Results                  
+==============================================================================
+Dep. Variable:                      y   No. Observations:                  200
+Model:                            GLM   Df Residuals:                      194
+Model Family:                 Poisson   Df Model:                            5
+Link Function:                    Log   Scale:                          1.0000
+Method:                          IRLS   Log-Likelihood:                -175.17
+Date:                Sat, 15 Nov 2025   Deviance:                       174.29
+Time:                        08:41:19   Pearson chi2:                     189.
+No. Iterations:                     5   Pseudo R-squ. (CS):             0.4327
+Covariance Type:            nonrobust                                         
+========================================================================================================================
+                                                           coef    std err          z      P&gt;|z|      [0.025      0.975]
+------------------------------------------------------------------------------------------------------------------------
+const                                                   -2.4463      0.341     -7.181      0.000      -3.114      -1.779
+math                                                     0.0575      0.011      5.257      0.000       0.036       0.079
+work                                                    -0.0014      0.010     -0.143      0.886      -0.021       0.018
+prog_2                                                   0.9915      0.360      2.755      0.006       0.286       1.697
+prog_3                                                   0.3136      0.442      0.710      0.478      -0.552       1.179
+Intercept                                               -2.4463      0.341     -7.181      0.000      -3.114      -1.779
+bs(work, df=2, degree=2, include_intercept=False)[0]     2.5229      0.695      3.630      0.000       1.161       3.885
+bs(work, df=2, degree=2, include_intercept=False)[1]    -1.2615      0.347     -3.631      0.000      -1.942      -0.581
+========================================================================================================================
+Equidispersion test: 0.8983776440365637
+=== GLM Model Comparison (Likelihood Ratio Test) ===
+Log-likelihood (simple):   -175.170
+Log-likelihood (complex):  -175.170
+LR statistic:              0.000
+Degrees of freedom diff:   0
+p-value:                   nan
+AIC (simple):              362.340
+AIC (complex):             362.340
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=288d29e8">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [27]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">X_spline_full_2</span> <span class="o">=</span> <span class="n">X_transformed_prog</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>  
+
+<span class="n">spline_work_2</span> <span class="o">=</span> <span class="n">dmatrix</span><span class="p">(</span>
+    <span class="s2">"bs(work, df=3, degree=2, include_intercept=False)"</span><span class="p">,</span> 
+    <span class="p">{</span><span class="s2">"work"</span><span class="p">:</span> <span class="n">df</span><span class="p">[</span><span class="s2">"work"</span><span class="p">]},</span> 
+    <span class="n">return_type</span><span class="o">=</span><span class="s1">'dataframe'</span>
+<span class="p">)</span>
+
+<span class="n">X_spline_full_2</span> <span class="o">=</span> <span class="n">X_spline_full_2</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">spline_work_2</span><span class="p">)</span>
+
+<span class="n">glm_poiss_spline_2</span> <span class="o">=</span> <span class="n">sm</span><span class="o">.</span><span class="n">GLM</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">X_spline_full_2</span><span class="p">,</span> <span class="n">family</span><span class="o">=</span><span class="n">sm</span><span class="o">.</span><span class="n">families</span><span class="o">.</span><span class="n">Poisson</span><span class="p">())</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">glm_poiss_spline_2</span><span class="o">.</span><span class="n">summary</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Equidispersion test:"</span><span class="p">,</span> <span class="n">equidispersion_test</span><span class="p">(</span><span class="n">glm_poiss_spline_2</span><span class="p">))</span>
+<span class="n">compareGLM</span><span class="p">(</span><span class="n">glm_poiss_full_trans</span><span class="p">,</span> <span class="n">glm_poiss_spline_2</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
+</div>
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
+<pre>                 Generalized Linear Model Regression Results                  
+==============================================================================
+Dep. Variable:                      y   No. Observations:                  200
+Model:                            GLM   Df Residuals:                      193
+Model Family:                 Poisson   Df Model:                            6
+Link Function:                    Log   Scale:                          1.0000
+Method:                          IRLS   Log-Likelihood:                -175.00
+Date:                Sat, 15 Nov 2025   Deviance:                       173.94
+Time:                        08:41:40   Pearson chi2:                     188.
+No. Iterations:                     5   Pseudo R-squ. (CS):             0.4337
+Covariance Type:            nonrobust                                         
+========================================================================================================================
+                                                           coef    std err          z      P&gt;|z|      [0.025      0.975]
+------------------------------------------------------------------------------------------------------------------------
+const                                                   -2.4812      0.347     -7.153      0.000      -3.161      -1.801
+math                                                     0.0573      0.011      5.227      0.000       0.036       0.079
+work                                                    -0.0025      0.016     -0.149      0.882      -0.035       0.030
+prog_2                                                   0.9904      0.360      2.753      0.006       0.285       1.696
+prog_3                                                   0.3229      0.442      0.731      0.465      -0.543       1.189
+Intercept                                               -2.4812      0.347     -7.153      0.000      -3.161      -1.801
+bs(work, df=3, degree=2, include_intercept=False)[0]     1.6166      0.484      3.337      0.001       0.667       2.566
+bs(work, df=3, degree=2, include_intercept=False)[1]     0.3875      0.573      0.677      0.499      -0.735       1.510
+bs(work, df=3, degree=2, include_intercept=False)[2]    -0.7378      0.424     -1.738      0.082      -1.570       0.094
+========================================================================================================================
+Equidispersion test: 0.901243608246454
+=== GLM Model Comparison (Likelihood Ratio Test) ===
+Log-likelihood (simple):   -175.170
+Log-likelihood (complex):  -174.997
+LR statistic:              0.345
+Degrees of freedom diff:   1
+p-value:                   0.55682
+AIC (simple):              362.340
+AIC (complex):             363.995
 </pre>
 </div>
 </div>
@@ -8982,7 +9225,9 @@ None
 <p>From the first graph (No. of students per no. of awards in each program), it is clear that program affects the number of awards - students in program 2 tend to have higher award counts. Therefore, we included prog in the model and treated it as a categorical (dummy) variable.
 Comparing this model with the previous best model - math-only model, we observed an improvement - lower AIC, higher log-likelihood, and p-value &lt; 0.05 in the likelihood ratio test.</p>
 <p>From the second graph (number of awards by amount of work and program), it appears that work has a nonlinear relationship with awards. We therefore added a polynomial transformation for the work variable.
-After comparing this model (math + prog + polynomial work) with the previous one, the fit again improved - AIC decreased, log-likelihood increased, and p-value &lt; 0.05, confirming that the transformation helps capture the relationship better.</p>
+After comparing this model (math + prog + polynomial work) with the previous one, the fit again improved - AIC decreased, log-likelihood increased, and p-value &lt; 0.05, confirming that the transformation helps capture the relationship better. Furthermore, we tested a higher-degree polynomial (degree 3) for the work variable, but this did not improve the model fit. We also experimented with spline transformations, but a spline with 2 degrees of freedom produced the same AIC and log-likelihood as the degree-2 polynomial model, while splines with higher degrees of freedom resulted in worse AIC.</p>
+<p>Thus, the final selected model is the Poisson GLM containing math, prog, and the degree-2 polynomial transformation of work.
+Additionally, the equidispersion test indicates no overdispersion (value = 0.898, close to 1), meaning the Poisson assumption holds, and the Poisson distribution is appropriate for this final model.</p>
 </div>
 </div>
 </div>
@@ -9002,7 +9247,7 @@ After comparing this model (math + prog + polynomial work) with the previous one
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [37]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">test_glm_with_cv</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">model_type</span><span class="p">,</span> <span class="n">model_name</span><span class="p">,</span> <span class="n">model_family</span><span class="o">=</span><span class="n">sm</span><span class="o">.</span><span class="n">families</span><span class="o">.</span><span class="n">Gaussian</span><span class="p">(),</span> <span class="n">n_folds</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
@@ -9059,7 +9304,7 @@ After comparing this model (math + prog + polynomial work) with the previous one
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [38]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="c1"># Here you have an example of the null lm model trained and tested with CV</span>
