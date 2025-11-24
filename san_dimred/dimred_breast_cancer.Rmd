@@ -66,12 +66,56 @@ biplot(data_pca_subset)
 data_pca$rotation[,"PC1"] %>% abs() %>% sort(decreasing = T) %>% head()
 ```
 
+```{r run PCA scaled}
+
+# Perform PCA
+data_pca1 <- prcomp(data_numeric, scale. = TRUE)
+
+# Plot the PCA output. Is it a good projection given how many features we have?
+lbs1 <- data$diagnosis
+fviz_pca_ind(data_pca1, geom.ind = "point", pointshape = 21, 
+             fill.ind = lbs1,
+             palette = "jco", 
+             addEllipses = TRUE,
+             legend.title = "Diagnosis") +
+  ggtitle("Breast cancer 2D PCA-plot") +
+  theme(plot.title = element_text(hjust = 0.5))
+
+```
+
+```{r analyze PCA scaled, warning=FALSE, fig.width=10, out.width="100%"}
+# Test your understanding of PCA
+# How many components do we need to sufficiently capture data?
+pca_summary1<-summary(data_pca1)
+pca_summary1$importance[,1:6]
+
+# What is the primary composition of first two principal components
+loadings <- abs(data_pca$rotation[, 1:2])  # Loadings for PC1 and PC2
+top_vars <- names(sort(rowSums(loadings), decreasing = TRUE)[1:8])
+data_pca_subset <- data_pca
+data_pca_subset$rotation <- data_pca_subset$rotation[top_vars, ]
+biplot(data_pca_subset)
+
+# If the projection is too dense, can you obtain the information other ways?
+data_pca$rotation[,"PC1"] %>% abs() %>% sort(decreasing = T) %>% head()
+```
+
 ```{r run t-SNE}
 # Reduce the dimensions using t-SNE
 
 tsne_res <- Rtsne::Rtsne(data_numeric, perplexity=50)
 
 tsne_res$Y %>% 
+  as.data.frame() %>%
+  mutate(diagnosis = data$diagnosis) %>% 
+  ggplot(aes(x=V1, y=V2, col=diagnosis)) + 
+  geom_point()
+```
+
+```{r}
+set.seed(123)
+tsne_res1 <- Rtsne::Rtsne(data_numeric, perplexity=100)
+tsne_res1$Y %>% 
   as.data.frame() %>%
   mutate(diagnosis = data$diagnosis) %>% 
   ggplot(aes(x=V1, y=V2, col=diagnosis)) + 
@@ -105,15 +149,90 @@ table(lda_values$class,labels)
 print(paste("LDA train accuracy:", sum(diag(table(lda_values$class,labels)))/length(labels)))
 print(paste("LDA train AUROC:", performance(prediction(lda_values$posterior[,2],labels), measure = "auc")@y.values[[1]][1]))
 ```
+```{r}
+head(data_numeric)
+
+```
+
+```{r}
+data_scaled <- scale(data_numeric)
+
+# head(data_scaled)
+apply(data_scaled, 2, mean)
+```
+
+```{r}
+apply(data_scaled, 2, sd)
+```
+
+```{r - LDA with scaled data}
+# Load the LDA() and other supporting function from the 3rd assignment into the environment.
+lda_model1 <- lda(data_scaled, labels)
+
+# Now you can compare LDA and PCA dimensionality reduction:
+lda_model1$scaling
+
+# Initial test of LDA predictive accuracy, no CV
+lda_values1 <- predict(lda_model)
+
+lda_plotData <- as.data.frame(lda_values1$x) %>% 
+  mutate(diagnosis=labels,
+         jitter=rnorm(nrow(data)))
+
+lda_plotData %>% 
+  ggplot(aes(x=LD1, y=jitter, col=diagnosis)) + 
+  geom_point() +
+  scale_y_continuous(limits=c(-10, 10),labels = NULL)
+
+print("Confusion matrix:")
+table(lda_values1$class,labels)
+print(paste("LDA train accuracy:", sum(diag(table(lda_values1$class,labels)))/length(labels)))
+print(paste("LDA train AUROC:", performance(prediction(lda_values1$posterior[,2],labels), measure = "auc")@y.values[[1]][1]))
+
+```
+
 # Independent work
 
 1. Briefly summarize the main analytical conclusions about the dataset.
+
+- The PCA analysis reveals that just two principal components capture 99.8% of the total variance, indicating that the 30 original features contain redundancy. So the most meaningful information can be represented in only one or two dimensions. 
+- Furhermore t-SNE method provided good separation of data. 
+- Additionally, LDA also demonstrated good explanation of data and achieved high classification accuracy of 96.5%.
+
 2. What are the disadvantages of using all features, for example, in a classification task or visualization? How do we select the "right features"?
+
+- Disadvantages of using all features:
+  - High-dimensional data cannot be visualized beyond three dimensions.
+  - Models tend to overfit when given too many features.
+  - More computationally intensive.
+
+- Methods for selecting right features:
+  - Directed feature selection: forward/backward selection, Lasso/Ridge regression.
+  - Dimensionality reduction: PCA, t-SNE, LDA.
+  - Manual selection: based on collinearity and p-values.
+
+- Disadvantages of using all features includes: no visualization (cannot visualize 30 feature in 2d), model can overfit
+
 3. Investigate the influence of the settings in the individual dimension reduction methods on their outcomes. Specifically, focus on scaling in PCA and LDA (no scaling was performed above) and perplexity in t-SNE.
+
+- Scaling PCA - After scaling, the principal components explain much less variance individually. The first two components explain about 63% of the variation and the first six components explain around 88.7%. This is because before scaling, features with large numerical ranges dominated the variance.
+
+- Scaling LDA - Scaling did not significantly change the LDA results. The confusion matrix, accuracy, and AUROC remained identical.
+
+- Changing perplexity in t-SNE - With low perplexity (like 10), the plot shows small clusters. With high perplexity (like 100), the points are more spread out and the clusters disapeared. The two classes are still separated.
+
 4. Complete the code below and compare the classification accuracy achieved with the three approaches. Explain the differences. Study the role of scaling.
+
+- Logistic regression with all features (baseline) - accuracy: 0.964 and AUROC: 0.965
+
+- Logistic regression on:
+  1. PCA with normal data - accuracy: 0.947 and AUROC: 0.990, lower accuracy but higher AUROC than a baseline, worst accuracy because PCA lost some information.
+  2. PCA with scaled data - accuracy: 0.964 and AUROC: 0.996, Scaling makes the contribution of information to principal components more balanced, so PCA with scaled data performs better than unscaled PCA
+  3. LDA normal data - accuracy: 0.976 and AUROC: 0.997, best results because LDA finds direction where the separation of classes is maximized.
 
 ```{r independent work, classification, warning=FALSE}
 # split the data
+set.seed(123)
 train.idx <- sample(1:nrow(data),size = nrow(data) * 0.7)
 
 # run the logistic model with the given dataset
@@ -130,4 +249,29 @@ logReg<-function(data,labels,train.idx){
 
 # run logistic regression on all features as a benchmark
 paste("Logistic regression with all features (accuracy and AUROC for test data):",paste(logReg(data_numeric,labels,train.idx),collapse=","))
+```
+```{r}
+data_pca_log_reg <- prcomp(data_numeric)
+data_pca_log_reg <- data_pca_log_reg$x[,1:2]
+head(data_pca_log_reg)
+```
+```{r}
+paste("Logistic regression on PCA (2 PCs) (accuracy and AUROC for test data):", paste(logReg(data_pca_log_reg, labels, train.idx), collapse=","))
+```
+
+```{r}
+scaled_data_pca_log_reg <- prcomp(data_numeric, scale. = TRUE)
+scaled_data_pca_log_reg <- scaled_data_pca_log_reg$x[,1:2]
+head(scaled_data_pca_log_reg)
+```
+
+```{r}
+paste("Logistic regression on scaled PCA (2 PCs) (accuracy and AUROC for test data):", paste(logReg(scaled_data_pca_log_reg, labels, train.idx), collapse=","))
+```
+
+```{r}
+labels <- data$diagnosis %>% as.factor()
+lda_model <- lda(data_numeric, labels)
+lda_data <- predict(lda_model)
+paste("Logistic regression on LDA (accuracy and AUROC for test data):", paste(logReg(lda_data, labels, train.idx), collapse=","))
 ```
